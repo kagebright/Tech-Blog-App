@@ -9,29 +9,36 @@ router.post('/', withAuth, async (req, res) => {
       user_id: req.session.user_id,
     });
 
-    res.status(200).json(newBlog);
+    if (!newBlog) {
+      res.status(400).json({ message: 'Failed to create new blog post' });
+      return;
+    }
+
+    res.status(201).json(newBlog);
   } catch (err) {
-    res.status(400).json(err);
+    res.status(500).json({ message: 'Server error', error: err });
   }
 });
 
 router.delete('/:id', withAuth, async (req, res) => {
   try {
-    const BlogData = await Blog.destroy({
+    const blog = await Blog.findOne({
       where: {
         id: req.params.id,
         user_id: req.session.user_id,
       },
     });
 
-    if (!BlogData) {
+    if (!blog) {
       res.status(404).json({ message: 'No Blog found with this id!' });
       return;
     }
 
-    res.status(200).json(BlogData);
+    const BlogData = await blog.destroy();
+
+    res.status(200).json({ message: 'Blog post deleted', data: BlogData });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: 'Server error', error: err });
   }
 });
 
