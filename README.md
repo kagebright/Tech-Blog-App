@@ -30,4 +30,4 @@ This project was completed by Bright Abety. Feel free to check out my [GitHub pa
 
 ## Links
 - [GitHub_repo](https://github.com/kagebright/bright-techblog.git) 
-- [video]
+- [video]()
